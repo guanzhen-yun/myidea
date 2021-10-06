@@ -7,6 +7,7 @@ import com.inke.myidea.service.InkeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,5 +50,11 @@ public class InkeController {
         map.put("classPath", classPath);
         map.put("className", className);
         return inkeService.createFileRequest(map);
+    }
+
+    @ApiOperation(value = "上传文件")
+    @PostMapping("/inke/upload")
+    public HttpResult<FileDo> uploadFile(@RequestParam("file") MultipartFile file) {
+        return inkeService.uploadFile(file);
     }
 }

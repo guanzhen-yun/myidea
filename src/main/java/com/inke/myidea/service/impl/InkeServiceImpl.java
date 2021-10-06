@@ -8,8 +8,10 @@ import com.inke.myidea.service.HttpResult;
 import com.inke.myidea.service.InkeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -63,5 +65,33 @@ public class InkeServiceImpl implements InkeService {
         return httpResult;
     }
 
+    @Override
+    public HttpResult<FileDo> uploadFile(@RequestParam("file") MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                BufferedOutputStream out = new BufferedOutputStream(
+                        new FileOutputStream(new File(
+                                "/Users/guanzhen/Desktop", "bigpng.jpg")));
+                System.out.println(file.getName());
+                out.write(file.getBytes());
+                out.flush();
+                out.close();
+                HttpResult<FileDo> httpResult = new HttpResult<>();
+                httpResult.setCode(HttpResult.SUCCESS_CODE);
+                httpResult.setMessage("创建文件信息成功");
+                FileDo fileDo = new FileDo();
+                fileDo.setFileResult("文件大小" + file.getSize());
+                httpResult.setData(fileDo);
+                return httpResult;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+        }
+        return null;
+
+    }
 
 }
